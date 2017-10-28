@@ -11,15 +11,18 @@
 #define ASHARP 466.164
 #define BNATURAL 493.883 
 
-// takes in input frequency
+#define TURN_RATIO 5
 
-// somehow takes in desired frequency
+// takes in input frequency and desired frequency
+
+// defines struct for keeping track of pitches
 struct Pitch
 {
 	char pitchClass[2];
 	size_t octave;
 };
 
+// returns the pitch for the octave beginning on middle C for each pitch class
 float enharmonic(char[2] pClass)
 {
 	if (pClass == "CN")
@@ -76,11 +79,17 @@ float enharmonic(char[2] pClass)
 	}
 }
 
+// takes in a pitch and returns its ideal frequency
 float desiredFreq(Pitch pitch)
 {
 	middleFreq = enharmonic(pitch.pitchClass);
 	octMult = pitch.octave - 4;
 	return middleFreq * 2^octMult;
 }
-// outputs rotation angle
+
+// compares the current and desired pitchs and returns the rotation angle
+float calcAngle(float desired, float current)
+{
+	return (desired-current)/TURN_RATIO;
+}
 // gives instructions to turn motor
